@@ -18,5 +18,36 @@ public class Booking {
     private String date;
     private String status;
 
+    public Long getConsumerId() {
+        return consumerId;
+    }
+    public void setConsumerId(Long consumerId) {
+        this.consumerId = consumerId;
+    }
+    public Long getSupplierId() {
+        return supplierId;
+    }
+    public void setSupplierId(Long supplierId) {
+        this.supplierId = supplierId;
+    }
+    public Long getTankerId() {
+        return tankerId;
+    }
+    public void setTankerId(Long tankerId) {
+        this.tankerId = tankerId;
+    }
+    public String getDate() {
+        return date;
+    }
+    public void setDate(String date) {
+        this.date = date;
+    }
+    public String getStatus() {
+        return status;
+    }
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
     public Booking() {}
 }

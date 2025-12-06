@@ -17,5 +17,30 @@ public class Payment {
     private String paymentDate;
     private String status;
 
+    public Long getBookingId() {
+        return bookingId;
+    }
+    public void setBookingId(Long bookingId) {
+        this.bookingId = bookingId;
+    }
+    public double getBookingAmount() {
+        return bookingAmount;
+    }
+    public void setBookingAmount(double bookingAmount) {
+        this.bookingAmount = bookingAmount;
+    }
+    public String getPaymentDate() {
+        return paymentDate;
+    }
+    public void setPaymentDate(String paymentDate) {
+        this.paymentDate = paymentDate;
+    }
+    public String getStatus() {
+        return status;
+    }
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
     public Payment() {}
 }
