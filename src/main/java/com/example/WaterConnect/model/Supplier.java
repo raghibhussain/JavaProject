@@ -13,6 +13,22 @@ public class Supplier {
     private Long id;
 
     private String companyName;
+    private String serviceArea;
 
     public Supplier() {}
+
+    public Supplier(Long id, String companyName, String serviceArea) {
+        this.id = id;
+        this.companyName = companyName;
+        this.serviceArea = serviceArea;
+    }
+
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
+
+    public String getCompanyName() { return companyName; }
+    public void setCompanyName(String companyName) { this.companyName = companyName; }
+
+    public String getServiceArea() { return serviceArea; }
+    public void setServiceArea(String serviceArea) { this.serviceArea = serviceArea; }
 }
