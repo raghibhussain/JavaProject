@@ -1,27 +1,44 @@
 package com.example.WaterConnect.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import com.example.WaterConnect.model.Payment;
+import com.example.WaterConnect.repository.PaymentRepository;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import com.example.WaterConnect.model.Payment;
-import com.example.WaterConnect.repository.PaymentRepository;
 
 @RestController
-@RequestMapping("/payment")
+@RequestMapping("/payments")
 public class PaymentController {
 
-    @Autowired
-    private PaymentRepository repo;
+    private final PaymentRepository repo;
 
-    @PostMapping("/process")
-    public Payment pay(@RequestBody Payment p) {
-        p.setStatus("Paid");
+    public PaymentController(PaymentRepository repo) {
+        this.repo = repo;
+    }
+
+    @PostMapping
+    public Payment create(@RequestBody Payment payment) {
+        return repo.save(payment);
+    }
+
+    @GetMapping
+    public List<Payment> getAll() {
+        return repo.findAll();
+    }
+
+    @GetMapping("/{id}")
+    public Payment getById(@PathVariable Long id) {
+        return repo.findById(id).orElse(null);
+    }
+
+    @PutMapping("/{id}")
+    public Payment update(@PathVariable Long id, @RequestBody Payment p) {
+        p.setId(id);
         return repo.save(p);
     }
 
-    @GetMapping("/all")
-    public List<Payment> all() {
-        return repo.findAll();
+    @DeleteMapping("/{id}")
+    public void delete(@PathVariable Long id) {
+        repo.deleteById(id);
     }
 }

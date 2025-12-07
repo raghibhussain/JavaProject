@@ -1,26 +1,44 @@
 package com.example.WaterConnect.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import com.example.WaterConnect.model.Supplier;
+import com.example.WaterConnect.repository.SupplierRepository;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import com.example.WaterConnect.model.Supplier;
-import com.example.WaterConnect.repository.SupplierRepository;
 
 @RestController
 @RequestMapping("/suppliers")
 public class SupplierController {
 
-    @Autowired
-    private SupplierRepository repo;
+    private final SupplierRepository repo;
 
-    @PostMapping("/add")
-    public Supplier add(@RequestBody Supplier s) {
+    public SupplierController(SupplierRepository repo) {
+        this.repo = repo;
+    }
+
+    @PostMapping
+    public Supplier create(@RequestBody Supplier supplier) {
+        return repo.save(supplier);
+    }
+
+    @GetMapping
+    public List<Supplier> getAll() {
+        return repo.findAll();
+    }
+
+    @GetMapping("/{id}")
+    public Supplier getById(@PathVariable Long id) {
+        return repo.findById(id).orElse(null);
+    }
+
+    @PutMapping("/{id}")
+    public Supplier update(@PathVariable Long id, @RequestBody Supplier s) {
+        s.setId(id);
         return repo.save(s);
     }
 
-    @GetMapping("/all")
-    public List<Supplier> all() {
-        return repo.findAll();
+    @DeleteMapping("/{id}")
+    public void delete(@PathVariable Long id) {
+        repo.deleteById(id);
     }
 }

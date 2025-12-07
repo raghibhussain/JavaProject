@@ -1,28 +1,44 @@
 package com.example.WaterConnect.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-
 import com.example.WaterConnect.model.User;
 import com.example.WaterConnect.repository.UserRepository;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/users")
 public class UserController {
 
-    @Autowired
-    private UserRepository repo;
+    private final UserRepository repo;
 
-    @PostMapping("/register")
-    public User register(@RequestBody User user) {
+    public UserController(UserRepository repo) {
+        this.repo = repo;
+    }
+
+    @PostMapping
+    public User create(@RequestBody User user) {
         return repo.save(user);
     }
 
-    @PostMapping("/login")
-    public String login(@RequestBody User user) {
-        User u = repo.findByEmail(user.getEmail());
-        if (u != null && u.getPassword().equals(user.getPassword()))
-            return "Login Successful";
-        return "Invalid Credentials";
+    @GetMapping
+    public List<User> getAll() {
+        return repo.findAll();
+    }
+
+    @GetMapping("/{id}")
+    public User getById(@PathVariable Long id) {
+        return repo.findById(id).orElse(null);
+    }
+
+    @PutMapping("/{id}")
+    public User update(@PathVariable Long id, @RequestBody User u) {
+        u.setId(id);
+        return repo.save(u);
+    }
+
+    @DeleteMapping("/{id}")
+    public void delete(@PathVariable Long id) {
+        repo.deleteById(id);
     }
 }

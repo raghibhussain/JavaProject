@@ -1,27 +1,44 @@
 package com.example.WaterConnect.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import com.example.WaterConnect.model.Booking;
+import com.example.WaterConnect.repository.BookingRepository;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import com.example.WaterConnect.model.Booking;
-import com.example.WaterConnect.repository.BookingRepository;
 
 @RestController
-@RequestMapping("/booking")
+@RequestMapping("/bookings")
 public class BookingController {
 
-    @Autowired
-    private BookingRepository repo;
+    private final BookingRepository repo;
 
-    @PostMapping("/create")
-    public Booking create(@RequestBody Booking b) {
-        b.setStatus("Pending");
+    public BookingController(BookingRepository repo) {
+        this.repo = repo;
+    }
+
+    @PostMapping
+    public Booking create(@RequestBody Booking booking) {
+        return repo.save(booking);
+    }
+
+    @GetMapping
+    public List<Booking> getAll() {
+        return repo.findAll();
+    }
+
+    @GetMapping("/{id}")
+    public Booking getById(@PathVariable Long id) {
+        return repo.findById(id).orElse(null);
+    }
+
+    @PutMapping("/{id}")
+    public Booking update(@PathVariable Long id, @RequestBody Booking b) {
+        b.setId(id);
         return repo.save(b);
     }
 
-    @GetMapping("/all")
-    public List<Booking> all() {
-        return repo.findAll();
+    @DeleteMapping("/{id}")
+    public void delete(@PathVariable Long id) {
+        repo.deleteById(id);
     }
 }
