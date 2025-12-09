@@ -8,37 +8,22 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/users")
+@CrossOrigin("*")
 public class UserController {
 
-    private final UserRepository repo;
+    private final UserRepository userRepo;
 
-    public UserController(UserRepository repo) {
-        this.repo = repo;
-    }
-
-    @PostMapping
-    public User create(@RequestBody User user) {
-        return repo.save(user);
+    public UserController(UserRepository userRepo) {
+        this.userRepo = userRepo;
     }
 
     @GetMapping
-    public List<User> getAll() {
-        return repo.findAll();
+    public List<User> getAllUsers() {
+        return userRepo.findAll();
     }
 
     @GetMapping("/{id}")
-    public User getById(@PathVariable Long id) {
-        return repo.findById(id).orElse(null);
-    }
-
-    @PutMapping("/{id}")
-    public User update(@PathVariable Long id, @RequestBody User u) {
-        u.setId(id);
-        return repo.save(u);
-    }
-
-    @DeleteMapping("/{id}")
-    public void delete(@PathVariable Long id) {
-        repo.deleteById(id);
+    public User getUserById(@PathVariable Long id) {
+        return userRepo.findById(id).orElse(null);
     }
 }
