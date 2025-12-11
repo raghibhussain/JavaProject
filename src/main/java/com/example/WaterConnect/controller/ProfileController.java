@@ -1,14 +1,7 @@
 package com.example.WaterConnect.controller;
 
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import com.example.WaterConnect.model.User;
 import com.example.WaterConnect.service.ProfileService;
 
 @RestController
@@ -22,14 +15,15 @@ public class ProfileController {
         this.profileService = profileService;
     }
 
+    // UPDATE PROFILE (supports individual & multiple fields)
     @PutMapping("/update/{id}")
-    public Object updateProfile(@PathVariable Long id, @RequestBody User updatedUser) {
-        return profileService.updateProfile(id, updatedUser);
+    public Object updateProfile(@PathVariable Long id, @RequestBody Object updatedFields) {
+        return profileService.updateProfile(id, updatedFields);
     }
 
+    // GET PROFILE
     @GetMapping("/{id}")
     public Object getProfile(@PathVariable Long id) {
         return profileService.getProfile(id);
     }
-
 }

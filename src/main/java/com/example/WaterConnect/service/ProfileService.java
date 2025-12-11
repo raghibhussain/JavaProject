@@ -1,5 +1,7 @@
 package com.example.WaterConnect.service;
 
+import java.util.Map;
+
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -16,61 +18,85 @@ public class ProfileService {
     private final UserRepository userRepo;
     private final SupplierRepository supplierRepo;
     private final ConsumerRepository consumerRepo;
+
     private final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
     public ProfileService(UserRepository userRepo,
                           SupplierRepository supplierRepo,
                           ConsumerRepository consumerRepo) {
-
         this.userRepo = userRepo;
         this.supplierRepo = supplierRepo;
         this.consumerRepo = consumerRepo;
     }
 
-    public Object updateProfile(Long id, User updatedData) {
+public Object updateProfile(Long id, Object updates) {
 
-        User existing = userRepo.findById(id)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+    User user = userRepo.findById(id)
+            .orElseThrow(() -> new RuntimeException("User not found"));
 
-        // update shared user fields
-        existing.setName(updatedData.getName());
-        existing.setEmail(updatedData.getEmail());
-        existing.setPhone(updatedData.getPhone());
+    // Convert requestBody to Map
+    Map<String, Object> map = (Map<String, Object>) updates;
 
-        if (updatedData.getPassword() != null && !updatedData.getPassword().isEmpty()) {
-            existing.setPassword(encoder.encode(updatedData.getPassword()));
-        }
+    // UPDATE USER TABLE FIELDS
+// UPDATE ONLY IF VALUES ARE PROVIDED
+if (map.get("name") != null)
+    user.setName((String) map.get("name"));
 
-        userRepo.save(existing);
+if (map.get("email") != null)
+    user.setEmail((String) map.get("email"));
 
-        // If SUPPLIER
-        if ("SUPPLIER".equalsIgnoreCase(existing.getRole())) {
+if (map.get("phone") != null)
+    user.setPhone((String) map.get("phone"));
 
-            Supplier supplier = supplierRepo.findById(id)
-                    .orElse(new Supplier());
+if (map.get("password") != null) {
+    String newPassword = (String) map.get("password");
+    user.setPassword(encoder.encode(newPassword));
+}
 
-            supplier.setId(id);
-            supplier.setCompanyName(((Supplier) updatedData).getCompanyName());
-            supplier.setServiceArea(((Supplier) updatedData).getServiceArea());
+    userRepo.save(user); // save basic user info
 
-            return supplierRepo.save(supplier);
-        }
+    // ROLE BASED UPDATE
+    String role = user.getRole();
 
-        // If CONSUMER
-        if ("CONSUMER".equalsIgnoreCase(existing.getRole())) {
+    // ---------- SUPPLIER ----------
+    if ("SUPPLIER".equalsIgnoreCase(role)) {
 
-            Consumer consumer = consumerRepo.findById(id)
-                    .orElse(new Consumer());
+        Supplier supplier = supplierRepo.findById(id)
+                .orElse(new Supplier());
 
-            consumer.setId(id);
-            consumer.setFullName(((Consumer) updatedData).getFullName());
-            consumer.setAddress(((Consumer) updatedData).getAddress());
+        supplier.setId(id);
 
-            return consumerRepo.save(consumer);
-        }
+        if (map.containsKey("companyName"))
+            supplier.setCompanyName((String) map.get("companyName"));
 
-        return existing;
+        if (map.containsKey("serviceArea"))
+            supplier.setServiceArea((String) map.get("serviceArea"));
+
+        return supplierRepo.save(supplier);
     }
+
+    // ---------- CONSUMER ----------
+    if ("CONSUMER".equalsIgnoreCase(role)) {
+
+        Consumer consumer = consumerRepo.findById(id)
+                .orElse(new Consumer());
+
+        consumer.setId(id);
+
+        if (map.containsKey("fullName"))
+            consumer.setFullName((String) map.get("fullName"));
+
+        if (map.containsKey("address"))
+            consumer.setAddress((String) map.get("address"));
+
+        if (map.containsKey("phone"))
+            consumer.setPhone((String) map.get("phone"));
+
+        return consumerRepo.save(consumer);
+    }
+
+    return user;
+}
 
     public Object getProfile(Long id) {
         return userRepo.findById(id).orElse(null);
