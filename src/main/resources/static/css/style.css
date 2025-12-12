@@ -247,6 +247,8 @@
 .carousel-header {
     position: relative;
     overflow: hidden;
+    height: 100vh;
+    object-fit: cover;
 }
 
 .carousel-indicators {
@@ -326,7 +328,7 @@
 .carousel .carousel-inner .carousel-item .carousel-caption-2  {
     position: absolute;
     width: 100%;
-    height: 100%;
+    height: 100vh;
     top: 0;
     left: 0;
     padding-top: 100px;
@@ -660,5 +662,6 @@
     background: var(--bs-dark);
 }
 /*** copyright end ***/
+
 
 
