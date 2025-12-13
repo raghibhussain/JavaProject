@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/supplier")
-public class supplierController {
+@RequestMapping("/suppliers")
+public class SupplierController {
 
     @Autowired
     private SupplierRepository supplierRepo;

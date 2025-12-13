@@ -95,9 +95,9 @@ event.preventDefault();
 
     // redirect based on role
     if (user.role === "SUPPLIER") {
-        window.location.href = "/contact.html";
+        window.location.href = "/supplier-dashboard.html";
     } else if (user.role === "CONSUMER") {
-        window.location.href = "/about.html";
+        window.location.href = "/consumer-dashboard.html";
     } else {
         window.location.href = "/register.html";
     }
