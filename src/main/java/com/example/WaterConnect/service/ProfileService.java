@@ -83,8 +83,8 @@ if (map.get("password") != null) {
 
         consumer.setId(id);
 
-        if (map.containsKey("fullName"))
-            consumer.setFullName((String) map.get("fullName"));
+        if (map.containsKey("fullname"))
+            consumer.setFullName((String) map.get("fullname"));
 
         if (map.containsKey("address"))
             consumer.setAddress((String) map.get("address"));
