@@ -197,6 +197,9 @@
   const user = JSON.parse(localStorage.getItem("loggedInUser"));
 
   const updatedSupplier = {
+    name: document.getElementById("name").value,
+    phone: document.getElementById("phone").value,
+    email: document.getElementById("email").value,
     companyName: document.getElementById("company").value,
     serviceArea: document.getElementById("serviceArea").value
   };
