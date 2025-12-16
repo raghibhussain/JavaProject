@@ -29,76 +29,116 @@ public class ProfileService {
         this.consumerRepo = consumerRepo;
     }
 
-public Object updateProfile(Long id, Object updates) {
+    @SuppressWarnings("unchecked")
+    public Object updateProfile(Long id, Object updates) {
 
-    User user = userRepo.findById(id)
-            .orElseThrow(() -> new RuntimeException("User not found"));
+        User user = userRepo.findById(id)
+                .orElseThrow(() -> new RuntimeException("User not found"));
 
-    // Convert requestBody to Map
-    Map<String, Object> map = (Map<String, Object>) updates;
+        Map<String, Object> map = (Map<String, Object>) updates;
 
-    // UPDATE USER TABLE FIELDS
-// UPDATE ONLY IF VALUES ARE PROVIDED
-if (map.get("name") != null)
-    user.setName((String) map.get("name"));
+        /* ================= USER TABLE ================= */
 
-if (map.get("email") != null)
-    user.setEmail((String) map.get("email"));
+        if (hasValue(map.get("name")))
+            user.setName(map.get("name").toString());
 
-if (map.get("phone") != null)
-    user.setPhone((String) map.get("phone"));
+        if (hasValue(map.get("email")))
+            user.setEmail(map.get("email").toString());
 
-if (map.get("password") != null) {
-    String newPassword = (String) map.get("password");
-    user.setPassword(encoder.encode(newPassword));
-}
+        if (hasValue(map.get("phone")))
+            user.setPhone(map.get("phone").toString());
 
-    userRepo.save(user); // save basic user info
+        if (hasValue(map.get("password"))) {
+            user.setPassword(encoder.encode(map.get("password").toString()));
+        }
 
-    // ROLE BASED UPDATE
-    String role = user.getRole();
+        userRepo.save(user);
 
-    // ---------- SUPPLIER ----------
-    if ("SUPPLIER".equalsIgnoreCase(role)) {
+        /* ================= ROLE TABLE ================= */
 
-        Supplier supplier = supplierRepo.findById(id)
-                .orElse(new Supplier());
+        Object roleData = null;
 
-        supplier.setId(id);
+        if ("SUPPLIER".equalsIgnoreCase(user.getRole())) {
 
-        if (map.containsKey("companyName"))
-            supplier.setCompanyName((String) map.get("companyName"));
+            Supplier supplier = supplierRepo.findById(id)
+                    .orElseGet(() -> {
+                        Supplier s = new Supplier();
+                        s.setId(id);
+                        return s;
+                    });
 
-        if (map.containsKey("serviceArea"))
-            supplier.setServiceArea((String) map.get("serviceArea"));
+            if (hasValue(map.get("companyName")))
+                supplier.setCompanyName(map.get("companyName").toString());
 
-        return supplierRepo.save(supplier);
+            if (hasValue(map.get("serviceArea")))
+                supplier.setServiceArea(map.get("serviceArea").toString());
+
+            roleData = supplierRepo.save(supplier);
+        }
+
+        if ("CONSUMER".equalsIgnoreCase(user.getRole())) {
+
+            Consumer consumer = consumerRepo.findById(id)
+                    .orElseGet(() -> {
+                        Consumer c = new Consumer();
+                        c.setId(id);
+                        return c;
+                    });
+
+            if (hasValue(map.get("fullname")))
+                consumer.setFullName(map.get("fullname").toString());
+
+            if (hasValue(map.get("address")))
+                consumer.setAddress(map.get("address").toString());
+
+            roleData = consumerRepo.save(consumer);
+        }
+
+        /* ================= RESPONSE ================= */
+
+        return buildProfileResponse(user, roleData);
     }
-
-    // ---------- CONSUMER ----------
-    if ("CONSUMER".equalsIgnoreCase(role)) {
-
-        Consumer consumer = consumerRepo.findById(id)
-                .orElse(new Consumer());
-
-        consumer.setId(id);
-
-        if (map.containsKey("fullname"))
-            consumer.setFullName((String) map.get("fullname"));
-
-        if (map.containsKey("address"))
-            consumer.setAddress((String) map.get("address"));
-
-        if (map.containsKey("phone"))
-            consumer.setPhone((String) map.get("phone"));
-
-        return consumerRepo.save(consumer);
-    }
-
-    return user;
-}
 
     public Object getProfile(Long id) {
-        return userRepo.findById(id).orElse(null);
+        User user = userRepo.findById(id).orElse(null);
+        if (user == null) return null;
+
+        Object roleData = null;
+
+        if ("SUPPLIER".equalsIgnoreCase(user.getRole()))
+            roleData = supplierRepo.findById(id).orElse(null);
+
+        if ("CONSUMER".equalsIgnoreCase(user.getRole()))
+            roleData = consumerRepo.findById(id).orElse(null);
+
+        return buildProfileResponse(user, roleData);
+    }
+
+    /* ================= HELPERS ================= */
+
+    private boolean hasValue(Object value) {
+        return value != null && !value.toString().trim().isEmpty();
+    }
+
+    private Map<String, Object> buildProfileResponse(User user, Object roleData) {
+        Map<String, Object> response = new java.util.HashMap<>();
+
+        response.put("id", user.getId());
+        response.put("name", user.getName());
+        response.put("email", user.getEmail());
+        response.put("phone", user.getPhone());
+        response.put("role", user.getRole());
+
+        if (roleData instanceof Consumer consumer) {
+            response.put("fullname", consumer.getFullName());
+            response.put("address", consumer.getAddress());
+        }
+
+        if (roleData instanceof Supplier supplier) {
+            response.put("companyName", supplier.getCompanyName());
+            response.put("serviceArea", supplier.getServiceArea());
+        }
+
+        return response;
     }
 }
