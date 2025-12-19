@@ -6,7 +6,9 @@ import java.util.List;
 
 public interface ConsumerRepository extends JpaRepository<Consumer, Long> {
 
-    List<Consumer> findByFullNameContainingIgnoreCase(String name);
-
     List<Consumer> findByAddressContainingIgnoreCase(String address);
+
+    List<Consumer> findByFullNameContainingIgnoreCase(String name);
 }
+
+

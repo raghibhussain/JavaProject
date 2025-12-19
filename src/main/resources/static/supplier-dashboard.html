@@ -100,6 +100,24 @@
     <h2>Dashboard</h2>
     <p>Welcome to your dashboard.</p>
 
+    <div class="card p-3 shadow-sm mt-4">
+  <h5>Search Consumers</h5>
+
+  <div class="row g-2">
+    <div class="col-md-8">
+      <input type="text" id="consumerArea" class="form-control"
+             placeholder="Search for Consumer by area (e.g. Karachi)">
+    </div>
+    <div class="col-md-4">
+      <button class="btn btn-success w-100" onclick="searchConsumers()">
+        Search
+      </button>
+    </div>
+  </div>
+</div>
+
+<div class="mt-4" id="consumerResults"></div>
+
     <div class="row mt-4">
       <div class="col-md-4">
         <div class="card p-3 shadow-sm">
@@ -197,6 +215,9 @@
   const user = JSON.parse(localStorage.getItem("loggedInUser"));
 
   const updatedSupplier = {
+    name: document.getElementsById("name").value,
+    phone : document.getElementById("phone").value,
+    email: document.getElementById("email").value,
     companyName: document.getElementById("company").value,
     serviceArea: document.getElementById("serviceArea").value
   };
@@ -228,6 +249,6 @@
 }
 </script>
 
-
+<script src="/js/search.js"></script>
 </body>
 </html>
