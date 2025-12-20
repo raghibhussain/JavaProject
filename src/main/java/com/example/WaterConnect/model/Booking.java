@@ -1,6 +1,8 @@
 package com.example.WaterConnect.model;
 
-import jakarta.persistence.Column;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -17,24 +19,19 @@ public class Booking {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // MANY bookings -> ONE consumer
     @ManyToOne(optional = false)
-    @JoinColumn(name = "consumer_id", nullable = false)
+    @JoinColumn(name = "consumer_id")
+    @JsonIgnoreProperties({"bookings", "user"})
     private Consumer consumer;
 
-    // MANY bookings -> ONE supplier
     @ManyToOne(optional = false)
-    @JoinColumn(name = "supplier_id", nullable = false)
+    @JoinColumn(name = "supplier_id")
+    @JsonIgnoreProperties({"bookings", "user"})
     private Supplier supplier;
 
-    @Column(nullable = false)
     private int quantity;
-
-    @Column(nullable = false)
     private String bookingDate;
-
-    @Column(nullable = false)
-    private String status; // PENDING, ACCEPTED, REJECTED, COMPLETED
+    private String status;
 
     public Booking() {}
 

@@ -31,14 +31,6 @@
 </div>
 
 <script>
-const user = JSON.parse(localStorage.getItem("loggedInUser"));
-if (!user || user.role !== "CONSUMER") location.href = "login.html";
-
-document.getElementById("sidebarName").innerText = user.name;
-
-// later: fetch bookings by consumer
-// GET /bookings/consumer/{id}
-
 function logout() {
   localStorage.removeItem("loggedInUser");
   location.href = "index.html";

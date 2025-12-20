@@ -24,12 +24,18 @@ function searchSuppliers() {
 
       data.forEach(supplier => {
         container.innerHTML += `
-          <div class="card p-3 mb-2">
-            <h5>${supplier.companyName}</h5>
-            <p>Area: ${supplier.serviceArea}</p>
-            <p>Phone: ${supplier.phone}</p>
-          </div>
-        `;
+            <div class="card p-3 mb-2 shadow-sm">
+              <h5>${supplier.companyName}</h5>
+              <p><strong>Area:</strong> ${supplier.serviceArea}</p>
+              <p><strong>Phone:</strong> ${supplier.phone}</p>
+          
+              <button 
+                class="btn btn-sm btn-success mt-2"
+                onclick="createBooking(${supplier.id})">
+                Book
+              </button>
+            </div>
+          `;
       });
     })
     .catch(error => {

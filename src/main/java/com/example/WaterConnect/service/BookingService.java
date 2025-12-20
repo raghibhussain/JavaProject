@@ -1,6 +1,7 @@
 package com.example.WaterConnect.service;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.example.WaterConnect.model.Booking;
 import com.example.WaterConnect.model.Consumer;
@@ -8,10 +9,12 @@ import com.example.WaterConnect.model.Supplier;
 import com.example.WaterConnect.repository.BookingRepository;
 import com.example.WaterConnect.repository.ConsumerRepository;
 import com.example.WaterConnect.repository.SupplierRepository;
+
+import java.time.LocalDateTime;
 import java.util.List;
 
-
 @Service
+@Transactional
 public class BookingService {
 
     private final BookingRepository bookingRepository;
@@ -27,7 +30,7 @@ public class BookingService {
         this.supplierRepository = supplierRepository;
     }
 
-    // ---------------- CREATE BOOKING ----------------
+    // ================= CREATE BOOKING =================
     public Booking createBooking(Long consumerId, Long supplierId, Booking booking) {
 
         Consumer consumer = consumerRepository.findById(consumerId)
@@ -40,17 +43,26 @@ public class BookingService {
         booking.setSupplier(supplier);
         booking.setStatus("PENDING");
 
+        // 🔴 IMPORTANT DEFAULTS (missing before)
+        if (booking.getQuantity() <= 0) {
+            booking.setQuantity(1);
+        }
+
+        if (booking.getBookingDate() == null) {
+            booking.setBookingDate(LocalDateTime.now().toString());
+        }
+
         return bookingRepository.save(booking);
     }
 
-    // ---------------- ACCEPT BOOKING ----------------
+    // ================= ACCEPT BOOKING =================
     public Booking acceptBooking(Long bookingId, Long supplierId) {
 
         Booking booking = bookingRepository
-                .findByIdAndSupplierId(bookingId, supplierId)
-                .orElseThrow(() -> new RuntimeException("Booking not found for this supplier"));
+                .findByIdAndSupplier_Id(bookingId, supplierId)
+                .orElseThrow(() -> new RuntimeException("Booking not found"));
 
-        if (!"PENDING".equals(booking.getStatus())) {
+        if (!"PENDING".equalsIgnoreCase(booking.getStatus())) {
             throw new RuntimeException("Only PENDING bookings can be accepted");
         }
 
@@ -58,14 +70,14 @@ public class BookingService {
         return bookingRepository.save(booking);
     }
 
-    // ---------------- REJECT BOOKING ----------------
+    // ================= REJECT BOOKING =================
     public Booking rejectBooking(Long bookingId, Long supplierId) {
 
         Booking booking = bookingRepository
-                .findByIdAndSupplierId(bookingId, supplierId)
-                .orElseThrow(() -> new RuntimeException("Booking not found for this supplier"));
+                .findByIdAndSupplier_Id(bookingId, supplierId)
+                .orElseThrow(() -> new RuntimeException("Booking not found"));
 
-        if (!"PENDING".equals(booking.getStatus())) {
+        if (!"PENDING".equalsIgnoreCase(booking.getStatus())) {
             throw new RuntimeException("Only PENDING bookings can be rejected");
         }
 
@@ -73,26 +85,27 @@ public class BookingService {
         return bookingRepository.save(booking);
     }
 
-    // ---------------- COMPLETE BOOKING ----------------
+    // ================= COMPLETE BOOKING =================
     public Booking completeBooking(Long bookingId, Long supplierId) {
 
         Booking booking = bookingRepository
-                .findByIdAndSupplierId(bookingId, supplierId)
-                .orElseThrow(() -> new RuntimeException("Booking not found for this supplier"));
+                .findByIdAndSupplier_Id(bookingId, supplierId)
+                .orElseThrow(() -> new RuntimeException("Booking not found"));
 
-        if (!"ACCEPTED".equals(booking.getStatus())) {
+        if (!"ACCEPTED".equalsIgnoreCase(booking.getStatus())) {
             throw new RuntimeException("Only ACCEPTED bookings can be completed");
         }
 
         booking.setStatus("COMPLETED");
         return bookingRepository.save(booking);
     }
+
+    // ================= GET BOOKINGS =================
     public List<Booking> getBookingsByConsumer(Long consumerId) {
-    return bookingRepository.findByConsumerId(consumerId);
-}
+        return bookingRepository.findByConsumer_Id(consumerId);
+    }
 
-public List<Booking> getBookingsBySupplier(Long supplierId) {
-    return bookingRepository.findBySupplierId(supplierId);
-}
-
+    public List<Booking> getBookingsBySupplier(Long supplierId) {
+        return bookingRepository.findBySupplier_Id(supplierId);
+    }
 }
