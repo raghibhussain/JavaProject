@@ -6,7 +6,7 @@ function searchSuppliers() {
     return;
   }
 
-  fetch(`http://localhost:8080/supplier/search/area/${area}`)
+  fetch(`http://localhost:8080/suppliers/search/area/${area}`)
     .then(response => {
       if (!response.ok) {
         throw new Error("API error");

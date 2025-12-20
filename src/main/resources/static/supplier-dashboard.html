@@ -152,8 +152,8 @@
   const user = JSON.parse(localStorage.getItem("loggedInUser"));
 
   const updatedSupplier = {
-    name: document.getElementsById("name").value,
-    phone : document.getElementById("phone").value,
+    name: document.getElementById("name").value,
+    phone: document.getElementById("phone").value,
     email: document.getElementById("email").value,
     companyName: document.getElementById("company").value,
     serviceArea: document.getElementById("serviceArea").value
@@ -184,7 +184,6 @@
     alert("Failed to update profile");
   });
 }
-
 function logout() {
   const confirmLogout = confirm("Are you sure you want to logout?");
 
