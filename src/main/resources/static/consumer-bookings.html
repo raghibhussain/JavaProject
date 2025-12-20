@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>My Bookings</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="css/dashboard.css">
+</head>
+<body>
+
+<div class="dashboard">
+
+  <div class="sidebar">
+    <div class="profile">
+      <img src="https://i.pravatar.cc/100">
+      <h5 id="sidebarName"></h5>
+      <small>Consumer</small>
+    </div>
+
+    <div class="menu">
+      <a href="consumer-dashboard.html">Dashboard</a>
+      <a href="consumer-bookings.html">Bookings</a>
+      <a href="#" onclick="logout()" class="logout">Logout</a>
+    </div>
+  </div>
+
+  <div class="content">
+    <h2>My Bookings</h2>
+    <div id="bookingList" class="mt-4"></div>
+  </div>
+</div>
+
+<script>
+const user = JSON.parse(localStorage.getItem("loggedInUser"));
+if (!user || user.role !== "CONSUMER") location.href = "login.html";
+
+document.getElementById("sidebarName").innerText = user.name;
+
+// later: fetch bookings by consumer
+// GET /bookings/consumer/{id}
+
+function logout() {
+  localStorage.removeItem("loggedInUser");
+  location.href = "index.html";
+}
+</script>
+<script src="/js/bookings.js"></script>
+
+</body>
+</html>

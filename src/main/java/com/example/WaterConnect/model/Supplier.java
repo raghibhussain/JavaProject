@@ -1,6 +1,13 @@
 package com.example.WaterConnect.model;
 
-import jakarta.persistence.*;
+import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Entity;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.PrimaryKeyJoinColumn;
 
 @Entity
 @PrimaryKeyJoinColumn(name = "id")
@@ -18,9 +25,25 @@ public class Supplier extends User {
         this.serviceArea = serviceArea;
     }
 
-    public String getCompanyName() { return companyName; }
-    public void setCompanyName(String companyName) { this.companyName = companyName; }
+    public String getCompanyName() {
+        return companyName;
+    }
 
-    public String getServiceArea() { return serviceArea; }
-    public void setServiceArea(String serviceArea) { this.serviceArea = serviceArea; }
+    public void setCompanyName(String companyName) {
+        this.companyName = companyName;
+    }
+
+    public String getServiceArea() {
+        return serviceArea;
+    }
+
+    public void setServiceArea(String serviceArea) {
+        this.serviceArea = serviceArea;
+    }
+
+    // ONE supplier -> MANY bookings
+    @JsonIgnore
+    @OneToMany(mappedBy = "supplier", cascade = CascadeType.ALL)
+    private List<Booking> bookings;
 }
+
