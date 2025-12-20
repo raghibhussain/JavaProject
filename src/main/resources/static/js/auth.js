@@ -94,12 +94,13 @@ event.preventDefault();
     localStorage.setItem("loggedInUser", JSON.stringify(user));
 
     // redirect based on role
-    if (user.role === "SUPPLIER") {
-        window.location.href = "/supplier-dashboard.html";
-    } else if (user.role === "CONSUMER") {
-        window.location.href = "/consumer-dashboard.html";
-    } else {
-        window.location.href = "/register.html";
-    }
+    if (user.role === "ADMIN") {
+    window.location.href = "admin-dashboard.html";
+} else if (user.role === "SUPPLIER") {
+    window.location.href = "supplier-dashboard.html";
+} else if (user.role === "CONSUMER") {
+    window.location.href = "consumer-dashboard.html";
+}
+
 }
 
