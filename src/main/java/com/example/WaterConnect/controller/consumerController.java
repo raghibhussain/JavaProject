@@ -15,15 +15,19 @@ public class ConsumerController {
     @Autowired
     private ConsumerRepository consumerRepo;
 
-    // 🔍 Search by name
     @GetMapping("/search/name/{name}")
     public List<Consumer> searchByName(@PathVariable String name) {
         return consumerRepo.findByFullNameContainingIgnoreCase(name);
     }
 
-    // 🔍 Search by address
     @GetMapping("/search/address/{address}")
     public List<Consumer> searchByAddress(@PathVariable String address) {
         return consumerRepo.findByAddressContainingIgnoreCase(address);
+    }
+
+    // ⭐ Recommendation (Supplier sees nearby consumers)
+    @GetMapping("/recommend")
+    public List<Consumer> recommendConsumers(@RequestParam String area) {
+        return consumerRepo.findByAddressContainingIgnoreCase(area);
     }
 }

@@ -5,71 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Simple Dashboard</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-  <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: #f5f6fa;
-    }
-
-    .dashboard {
-      display: flex;
-      height: 100vh;
-    }
-
-    /* Sidebar */
-    .sidebar {
-      width: 250px;
-      background: #1e272e;
-      color: #fff;
-      display: flex;
-      flex-direction: column;
-    }
-
-    .profile {
-      padding: 20px;
-      text-align: center;
-      border-bottom: 1px solid #2f3640;
-    }
-
-    .profile img {
-      width: 80px;
-      height: 80px;
-      border-radius: 50%;
-      margin-bottom: 10px;
-    }
-
-    .profile h5 {
-      margin: 0;
-      font-size: 16px;
-    }
-
-    .menu {
-      padding: 20px 0;
-    }
-
-    .menu a {
-      display: block;
-      padding: 12px 20px;
-      color: #dcdde1;
-      text-decoration: none;
-    }
-
-    .menu a:hover {
-      background: #2f3640;
-      color: #fff;
-    }
-
-    /* Main content */
-    .content {
-      flex: 1;
-      padding: 30px;
-    }
-
-    .card {
-      border-radius: 10px;
-    }
-  </style>
+  <link rel="stylesheet" href="css/dashboard.css">
 </head>
 <body>
 
@@ -91,6 +27,7 @@
       <a href="#">Orders</a>
       <a href="#">Messages</a>
       <a href="#">Settings</a>
+      <a href="#" onclick="logout()" class="logout">Logout</a>
     </div>
 
   </div>
@@ -99,6 +36,25 @@
   <div class="content">
     <h2>Dashboard</h2>
     <p>Welcome to your dashboard.</p>
+<div class="card p-3 shadow-sm mt-4">
+  <h5>Search Water Suppliers</h5>
+
+  <div class="row g-2">
+    <div class="col-md-8">
+      <input type="text" id="searchArea" class="form-control"
+             placeholder="Enter area (e.g. Karachi)">
+             <div id="supplierList"></div>
+    </div>
+
+    <div class="col-md-4">
+      <button class="btn btn-primary w-100" onclick="searchSuppliers()">
+        Search
+      </button>
+    </div>
+  </div>
+</div>
+
+<div class="mt-4" id="supplierResults"></div>
 
     <div class="row mt-4">
       <div class="col-md-4">
@@ -228,7 +184,19 @@
     alert("Failed to update profile");
   });
 }
+function logout() {
+  const confirmLogout = confirm("Are you sure you want to logout?");
+
+  if (confirmLogout) {
+    localStorage.removeItem("loggedInUser");
+    window.location.href = "index.html";
+  }
+}
 </script>
+<script src="/js/search.js"></script>
+
+
+
 
 </body>
 </html>
