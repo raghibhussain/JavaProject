@@ -92,7 +92,7 @@ function renderBookings(bookings) {
                 Accept
               </button>
 
-              <button class="btn btn-sm btn-danger ms-2"
+              <button class="btn btn-sm btn-danger mt-2"
                 onclick="updateBooking(${b.id}, 'reject')">
                 Reject
               </button>

@@ -20,6 +20,12 @@ async function registerUser(event) {
     const phone = document.getElementById("phone").value;
     const password = document.getElementById("password").value;
 
+    if (!role || !name || !email || !phone || !password) {
+    hideSpinner();
+    alert("All fields are required");
+    return;
+  }
+
     // Choose API endpoint based on role
     let endpoint = "";
 

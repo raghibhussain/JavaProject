@@ -301,30 +301,6 @@
     position: relative;
 }
 
-.carousel .carousel-inner .carousel-item .carousel-caption-1  {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    top: 0;
-    left: 0;
-    padding-top: 100px;
-    display: flex;
-    align-items: center;
-    justify-content: end;
-    background: linear-gradient(rgba(0, 0, 0, .5), rgba(0, 0, 0, 0.5));
-    background-size: cover;
-}
-
-.carousel-caption-1-content {
-    text-align: end;
-    padding-right: 100px;
-}
-
-.carousel-caption-1-content .carousel-caption-1-content-btn {
-    display: flex;
-    justify-content: end;
-}
-
 .carousel .carousel-inner .carousel-item .carousel-caption-2  {
     position: absolute;
     width: 100%;
@@ -402,31 +378,9 @@
 .modal .modal-header {
     height: 100px;
 }
-
-#searchModal .modal-content {
-    background: rgba(255, 255, 255, .6);
-}
 /*** Carousel Hero Header End ***/
 
 /*** Single Page Hero Header Start ***/
-.bg-breadcrumb {
-    position: relative;
-    overflow: hidden;
-    background: linear-gradient(rgba(0, 20, 66, 0.7), rgba(0, 20, 66, 0.7)), url(../img/breadcrumb.jpg);
-    background-position: center top;
-    background-repeat: no-repeat;
-    background-size: cover;
-    padding: 120px 0 60px 0;
-    transition: 0.5s;
-}
-
-.bg-breadcrumb .breadcrumb {
-    position: relative;
-}
-
-.bg-breadcrumb .breadcrumb .breadcrumb-item a {
-    color: var(--bs-white);
-}
 
 @media (max-width: 992px) {
     .bg-breadcrumb {
@@ -434,8 +388,6 @@
     }
 }
 /*** Single Page Hero Header End ***/
-
-
 /*** About Start ***/
 .about .about-img {
     position: relative;
@@ -472,7 +424,7 @@
     top: 0;
     left: 0;
     padding: 25px;
-    font-size: 30px;
+    font-size: 20px;
     font-weight: bold;
     background: var(--bs-secondary);
     color: var(--bs-white);
@@ -550,15 +502,6 @@
     color: var(--bs-primary) !important;
 }
 /*** Service End ***/
-
-
-/*** Products Start ***/
-.product .product-item {
-    border: 1px solid rgba(196, 211, 211, 0.9);
-    border-radius: 10px;
-}
-
-/*** Products End ***/
 
 /*** Blog Start ***/
 .blog .blog-item {
@@ -662,6 +605,3 @@
     background: var(--bs-dark);
 }
 /*** copyright end ***/
-
-
-

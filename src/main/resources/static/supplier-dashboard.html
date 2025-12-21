@@ -16,7 +16,7 @@
 
     <!-- Profile section (TOP) -->
     <div class="profile">
-      <img src="https://i.pravatar.cc/100" alt="profile">
+      <img src="img/userpfp.png" alt="profile">
       <h5 id="sidebarName">The Supplier</h5>
       <small id="sidebarRole">Supplier</small>
     </div>
@@ -25,9 +25,7 @@
 <div class="menu">
   <a href="supplier-dashboard.html">Dashboard</a>
   <a href="supplier-bookings.html">Bookings</a>
-  <a href="#">Messages</a>
-  <a href="#">Settings</a>
-  <a href="#" onclick="logout()" class="logout">Logout</a>
+  <a href="#" onclick="logout()"><span class="logout">Logout</span></a>
 </div>
 
 
@@ -47,7 +45,7 @@
              placeholder="Search for Consumer by area (e.g. Karachi)">
     </div>
     <div class="col-md-4">
-      <button class="btn btn-success w-100" onclick="searchConsumers()">
+      <button class="btn btn-primary w-100" onclick="searchConsumers()">
         Search
       </button>
     </div>

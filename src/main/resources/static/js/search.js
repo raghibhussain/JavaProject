@@ -27,7 +27,6 @@ function searchSuppliers() {
             <div class="card p-3 mb-2 shadow-sm">
               <h5>${supplier.companyName}</h5>
               <p><strong>Area:</strong> ${supplier.serviceArea}</p>
-              <p><strong>Phone:</strong> ${supplier.phone}</p>
           
               <button 
                 class="btn btn-sm btn-success mt-2"
@@ -97,7 +96,6 @@ function searchConsumers() {
           <div class="card mb-2 p-3 shadow-sm">
             <h6>${consumer.fullName || consumer.name}</h6>
             <p><strong>Address:</strong> ${consumer.address}</p>
-            <p><strong>Phone:</strong> ${consumer.phone}</p>
           </div>
         `;
         resultsDiv.innerHTML += card;
