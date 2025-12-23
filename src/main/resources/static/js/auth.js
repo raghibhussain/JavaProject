@@ -1,112 +1,132 @@
 const BASE_URL = "http://localhost:8080";
 
+/* ================= SPINNER ================= */
+
 function showSpinner() {
-    document.getElementById("spinner").classList.add("show");
+    document.getElementById("spinner")?.classList.add("show");
 }
 
 function hideSpinner() {
-    document.getElementById("spinner").classList.remove("show");
+    document.getElementById("spinner")?.classList.remove("show");
 }
 
+/* ================= REGISTER ================= */
+
+document.addEventListener("DOMContentLoaded", () => {
+
+    const registerForm = document.getElementById("register-form");
+    const loginForm = document.getElementById("login-form");
+
+    if (registerForm) {
+        registerForm.addEventListener("submit", registerUser);
+    }
+
+    if (loginForm) {
+        loginForm.addEventListener("submit", loginUser);
+    }
+});
 
 async function registerUser(event) {
     event.preventDefault();
 
+    const form = event.target;
+
+    /* 🔥 Let browser validation run first */
+    if (!form.checkValidity()) {
+        return; // browser shows native validation UI
+    }
+
     showSpinner();
-    // Get HTML values
+
     const role = document.getElementById("roleSelect").value;
-    const name = document.getElementById("name").value;
-    const email = document.getElementById("email").value;
-    const phone = document.getElementById("phone").value;
+    const name = document.getElementById("name").value.trim();
+    const email = document.getElementById("email").value.trim();
+    const phone = document.getElementById("phone").value.trim();
     const password = document.getElementById("password").value;
 
-    if (!role || !name || !email || !phone || !password) {
-    hideSpinner();
-    alert("All fields are required");
-    return;
-  }
+    const endpoint =
+        role === "SUPPLIER"
+            ? "/auth/register/supplier"
+            : "/auth/register/consumer";
 
-    // Choose API endpoint based on role
-    let endpoint = "";
+    const data = { name, email, phone, password };
 
-    if (role === "SUPPLIER") {
-        endpoint = "/auth/register/supplier";
-    } else {
-        endpoint = "/auth/register/consumer";
-    }
-
-    // Prepare data object
-    const data = {
-        name: name,
-        email: email,
-        phone: phone,
-        password: password
-    };
-
-    // Send request
-    let response = await fetch(BASE_URL + endpoint, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data)
-    });
-
-    let result;
     try {
-        result = await response.json();
-    } catch {
-        result = {};
+        const response = await fetch(BASE_URL + endpoint, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(data)
+        });
+
+        if (!response.ok) {
+            throw new Error("Registration failed");
+        }
+
+        await response.json();
+        hideSpinner();
+
+        const resultElement = document.getElementById("result");
+        if (resultElement) {
+            resultElement.innerText = "Account created successfully!";
+        }
+
+        setTimeout(() => {
+            window.location.href = "/login.html";
+        }, 1500);
+
+    } catch (error) {
+        hideSpinner();
+        console.error("Register error:", error);
     }
-
-    hideSpinner();
-
-    // Show message
-    const resultElement = document.getElementById("result");
-if (resultElement) {
-    resultElement.innerText = "Account created successfully for " + role + "!";
 }
 
-    console.log(result);
-
-    setTimeout(() => {
-        window.location.href = "/login.html";
-    }, 1500);
-}
+/* ================= LOGIN ================= */
 
 async function loginUser(event) {
-event.preventDefault();
-    showSpinner();
+    event.preventDefault();
 
-    const data = {
-        email: document.getElementById("email").value,
-        password: document.getElementById("password").value
-    };
+    const form = event.target;
 
-    let res = await fetch(BASE_URL + "/auth/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data)
-    });
-
-    let user = await res.json();
-
-    hideSpinner();
-
-    if (user.message === "Invalid email or password") {
-        alert("Wrong email or password");
+    /* 🔥 Browser validation first */
+    if (!form.checkValidity()) {
         return;
     }
 
-    // save user session
-    localStorage.setItem("loggedInUser", JSON.stringify(user));
+    showSpinner();
 
-    // redirect based on role
-    if (user.role === "ADMIN") {
-    window.location.href = "admin-dashboard.html";
-} else if (user.role === "SUPPLIER") {
-    window.location.href = "supplier-dashboard.html";
-} else if (user.role === "CONSUMER") {
-    window.location.href = "consumer-dashboard.html";
+    const email = document.getElementById("email").value.trim();
+    const password = document.getElementById("password").value;
+
+    try {
+        const res = await fetch(BASE_URL + "/auth/login", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email, password })
+        });
+
+        if (!res.ok) {
+            throw new Error("Login failed");
+        }
+
+        const user = await res.json();
+        hideSpinner();
+
+        if (user.message === "Invalid email or password") {
+            return;
+        }
+
+        localStorage.setItem("loggedInUser", JSON.stringify(user));
+
+        if (user.role === "ADMIN") {
+            window.location.href = "admin-dashboard.html";
+        } else if (user.role === "SUPPLIER") {
+            window.location.href = "supplier-dashboard.html";
+        } else if (user.role === "CONSUMER") {
+            window.location.href = "consumer-dashboard.html";
+        }
+
+    } catch (error) {
+        hideSpinner();
+        console.error("Login error:", error);
+    }
 }
-
-}
-

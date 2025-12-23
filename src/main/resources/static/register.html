@@ -42,7 +42,7 @@
                     <!-- NAME -->
                     <div class="form-group">
                         <label for="your_name"><i class="zmdi zmdi-account material-icons-name"></i></label>
-                        <input type="text" name="name" id="name" placeholder="Your Name" required/>
+                        <input type="text" name="name" id="name" placeholder="Your Name" required minlength="3"/>
                     </div>
 
                     <!-- EMAIL -->
@@ -54,13 +54,13 @@
                     <!-- PHONE -->
                     <div class="form-group">
                         <label for="your_phone"><i class="zmdi zmdi-phone"></i></label>
-                        <input type="text" name="phone" id="phone" placeholder="Your Phone Number" required/>
+                        <input type="text" name="phone" id="phone" placeholder="Your Phone Number" minlength="8" required/>
                     </div>
 
                     <!-- PASSWORD -->
                     <div class="form-group">
                         <label for="your_pass"><i class="zmdi zmdi-lock"></i></label>
-                        <input type="password" name="password" id="password" placeholder="Password" required/>
+                        <input type="password" name="password" id="password" placeholder="Password" minlength="6" required/>
                     </div>
 
                     <!-- ROLE SELECT -->
@@ -76,7 +76,8 @@
                     
                     <!-- SUBMIT BUTTON -->
                     <div class="form-group form-button">
-                        <input type="submit" onclick="registerUser(event)" class="form-submit" value="Register" />
+                        <input type="submit" class="form-submit" value="Register" />
+
                     </div>
                     <a href="login.html" class="signup-image-link"><i class="zmdi zmdi-check-all"> I am already a user</i></a>
 
