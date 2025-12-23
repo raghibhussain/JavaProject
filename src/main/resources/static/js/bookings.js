@@ -50,13 +50,11 @@ function renderBookings(bookings) {
       contactHtml = user.role === "SUPPLIER"
         ? `
           <hr>
-          <p><strong>Consumer Name:</strong> ${b.consumer.name}</p>
           <p><strong>Phone:</strong> ${b.consumer.phone}</p>
           <p><strong>Email:</strong> ${b.consumer.email}</p>
         `
         : `
           <hr>
-          <p><strong>Supplier:</strong> ${b.supplier.companyName}</p>
           <p><strong>Phone:</strong> ${b.supplier.phone}</p>
           <p><strong>Email:</strong> ${b.supplier.email}</p>
         `;
@@ -81,6 +79,7 @@ function renderBookings(bookings) {
         </p>
 
         <p><strong>Date:</strong> ${new Date(b.bookingDate).toLocaleString()}</p>
+        <p><strong>Location:</strong> ${b.consumer.address}</p>
 
         ${contactHtml}
 
